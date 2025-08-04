@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国朝代变迁历史</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b0000',
+                        secondary: '#d4af37',
+                        dark: '#1a202c'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dynasty-card {
+            transition: all 0.3s ease;
+            transform-origin: center bottom;
+        }
+        .dynasty-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .dynasty-card.active {
+            transform: translateY(-20px) scale(1.05);
+            z-index: 10;
+        }
+        .map-container {
+            position: relative;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/China_edcp_relief_location_map.jpg/800px-China_edcp_relief_location_map.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .dynasty-area {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 8px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .dynasty-area:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        .timeline {
+            scrollbar-width: thin;
+            scrollbar-color: #8b0000 #f0f0f0;
+        }
+        .timeline::-webkit-scrollbar {
+            height: 8px;
+        }
+        .timeline::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        .timeline::-webkit-scrollbar-thumb {
+            background: #8b0000;
+            border-radius: 10px;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <!-- 页眉 -->
+    <header class="bg-primary text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-2">
+                <i class="fas fa-landmark mr-3 text-secondary"></i>中国五千年朝代变迁史
+            </h1>
+            <p class="text-center text-gray-200 max-w-2xl mx-auto">
+                探索从夏朝到清朝的中华文明演变，了解每个朝代的政治、文化和历史遗产
+            </p>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 时间轴导航 -->
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">
+                <i class="fas fa-history mr-2 text-primary"></i>历史时间轴
+            </h2>
+            <div class="timeline overflow-x-auto pb-4 flex space-x-4 px-2">
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="xia">夏朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="shang">商朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="zhou">周朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="qin">秦朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="han">汉朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="sanguo">三国</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="jin">晋朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="sui">隋朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="tang">唐朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="song">宋朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="yuan">元朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="ming">明朝</button>
+                <button class="dynasty-btn px-4 py-2 bg-secondary text-white rounded-lg shadow whitespace-nowrap transition-all hover:bg-opacity-90 active:scale-95" data-dynasty="qing">清朝</button>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- 朝代卡片区 -->
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div id="dynasty-cards" class="p-4">
+                        <!-- 默认显示卡片 -->
+                        <div class="dynasty-card active bg-gradient-to-r from-primary to-secondary text-white p-6 rounded-xl fade-in" id="default-card">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-2xl font-bold mb-2">中华五千年文明</h2>
+                                    <p class="text-white text-opacity-90 mb-4">点击上方时间轴或下方地图中的朝代开始探索</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                                    <i class="fas fa-dragon text-3xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <p class="mb-3"><i class="fas fa-lightbulb mr-2"></i>中国历史绵延五千余年，经历了多次朝代更迭，每个朝代都留下了独特的文化遗产</p>
+                                <p class="mb-3"><i class="fas fa-book mr-2"></i>从夏商周到元明清，每个朝代在政治制度、文化艺术、科技发展等方面都有重要贡献</p>
+                                <p><i class="fas fa-map mr-2"></i>通过地图区域可以直观了解不同朝代疆域范围的变化</p>
+                            </div>
+                        </div>
+
+                        <!-- 各朝代卡片（默认隐藏） -->
+                        <div class="dynasty-card hidden" id="xia-card">
+                            <!-- 夏朝内容 -->
+                        </div>
+                        <!-- 其他朝代卡片省略 -->
+                    </div>
+                </div>
+                
+                <!-- 详细信息区域 -->
+                <div id="dynasty-detail" class="mt-8 bg-white rounded-xl shadow-lg p-6 fade-in">
+                    <h3 class="text-xl font-bold text-primary mb-4">朝代详细信息</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-crown mr-2 text-secondary"></i>统治者</h4>
+                            <p class="mb-4">点击朝代查看统治者信息</p>
+                            
+                            <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-landmark mr-2 text-secondary"></i>首都</h4>
+                            <p>点击朝代查看首都信息</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-hourglass-half mr-2 text-secondary"></i>持续时间</h4>
+                            <p class="mb-4">点击朝代查看持续时间</p>
+                            
+                            <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-book mr-2 text-secondary"></i>重要成就</h4>
+                            <p>点击朝代查看重要成就</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 地图区域 -->
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-4 text-center text-gray-700">
+                        <i class="fas fa-map-marked-alt mr-2 text-primary"></i>朝代疆域变化
+                    </h2>
+                    <div class="map-container relative h-96 w-full bg-gray-100 rounded-lg overflow-hidden">
+                        <!-- 地图上的朝代区域 -->
+                        <div class="dynasty-area bg-red-500 border-red-700" style="top: 30%; left: 30%; width: 30%; height: 30%;" data-dynasty="qin">
+                            <div class="bg-red-500 text-white text-center py-1 text-sm">秦朝</div>
+                        </div>
+                        <div class="dynasty-area bg-blue-500 border-blue-700" style="top: 25%; left: 25%; width: 40%; height: 40%;" data-dynasty="han">
+                            <div class="bg-blue-500 text-white text-center py-1 text-sm">汉朝</div>
+                        </div>
+                        <div class="dynasty-area bg-green-500 border-green-700" style="top: 20%; left: 20%; width: 50%; height: 50%;" data-dynasty="tang">
+                            <div class="bg-green-500 text-white text-center py-1 text-sm">唐朝</div>
+                        </div>
+                        <div class="dynasty-area bg-yellow-600 border-yellow-800" style="top: 15%; left: 15%; width: 60%; height: 60%;" data-dynasty="yuan">
+                            <div class="bg-yellow-600 text-white text-center py-1 text-sm">元朝</div>
+                        </div>
+                        <div class="dynasty-area bg-purple-500 border-purple-700" style="top: 10%; left: 10%; width: 70%; height: 70%;" data-dynasty="qing">
+                            <div class="bg-purple-500 text-white text-center py-1 text-sm">清朝</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 图例 -->
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-500 mr-2"></div>
+                            <span class="text-xs">秦朝</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 mr-2"></div>
+                            <span class="text-xs">汉朝</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 mr-2"></div>
+                            <span class="text-xs">唐朝</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-yellow-600 mr-2"></div>
+                            <span class="text-xs">元朝</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 趣味知识 -->
+                <div class="mt-8 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-lightbulb mr-2"></i>历史冷知识
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <i class="fas fa-star text-yellow-300 mt-1 mr-2"></i>
+                            <p>秦始皇统一六国后，规定皇帝的命令称为"制"和"诏"，皇帝自称为"朕"，这些称谓被后世沿用两千多年。</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-star text-yellow-300 mt-1 mr-2"></i>
+                            <p>唐朝长安城是当时世界上最大的城市，面积达84平方公里，是罗马城的7倍。</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-star text-yellow-300 mt-1 mr-2"></i>
+                            <p>宋朝时期中国GDP占世界经济总量的60%以上，是当时世界上最富裕的国家。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2">中国朝代变迁交互式时间轴</p>
+            <p class="text-gray-400 text-sm">探索中华五千年文明历史，了解各朝代政治、经济、文化发展</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-weibo"></i></a>
+                <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-weixin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 朝代数据
+        const dynastyData = {
+            xia: {
+                name: "夏朝",
+                years: "约前2070年-前1600年",
+                capital: "阳城、阳翟等",
+                founder: "禹",
+                achievements: "中国史书中记载的第一个世袭制朝代，开创了"家天下"的王位继承制度",
+                description: "夏朝是中国传统史书中记载的第一个世袭制朝代，标志着中国从原始社会进入了奴隶社会。夏朝的建立者禹因治水有功而获得舜的禅让。夏朝共传十四代、十七位帝王，延续约471年。",
+                area: "黄河流域中下游地区"
+            },
+            shang: {
+                name: "商朝",
+                years: "约前1600年-前1046年",
+                capital: "亳、殷等",
+                founder: "汤",
+                achievements: "创造了成熟的甲骨文，青铜器制作达到高峰",
+                description: "商朝是中国历史上第一个有直接文字记载的朝代。商朝以青铜器制造闻名，创造了灿烂的青铜文明。商朝后期定都于殷（今河南安阳），因此又称殷商。",
+                area: "黄河流域中下游，扩展到长江流域"
+            },
+            qin: {
+                name: "秦朝",
+                years: "前221年-前207年",
+                capital: "咸阳",
+                founder: "嬴政（秦始皇）",
+                achievements: "统一六国，建立中国历史上第一个中央集权制国家；统一文字、货币、度量衡；修建万里长城",
+                description: "秦朝是中国历史上第一个大一统王朝，结束了春秋战国以来长达五百多年的分裂局面。秦始皇推行郡县制，实行书同文、车同轨的政策，奠定了中国两千余年政治制度的基本格局。",
+                area: "北至长城，南至岭南，东至大海，西至陇西"
+            },
+            han: {
+                name: "汉朝",
+                years: "前202年-220年",
+                capital: "长安、洛阳",
+                founder: "刘邦（汉高祖）",
+                achievements: "开辟丝绸之路；确立儒家思想的正统地位；发明造纸术",
+                description: "汉朝分为西汉和东汉两个时期，是继秦朝之后的大一统王朝。汉朝时期国力强盛，文化统一，科技发达，开通了丝绸之路，促进了东西方文化交流。",
+                area: "东至朝鲜半岛，西至中亚，南至越南，北至大漠"
+            },
+            tang: {
+                name: "唐朝",
+                years: "618年-907年",
+                capital: "长安",
+                founder: "李渊（唐高祖）",
+                achievements: "开创贞观之治和开元盛世；唐诗达到鼎盛；发明雕版印刷术",
+                description: "唐朝是中国历史上最强盛的朝代之一，经济繁荣，文化开放，国际影响力巨大。首都长安是当时世界上最大的国际大都市。唐朝在政治、经济、文化、外交等方面都达到了很高成就。",
+                area: "东至朝鲜半岛，西至中亚咸海，南至越南，北至贝加尔湖"
+            },
+            song: {
+                name: "宋朝",
+                years: "960年-1279年",
+                capital: "东京开封府、临安府",
+                founder: "赵匡胤（宋太祖）",
+                achievements: "经济高度发达，GDP占当时世界60%以上；发明活字印刷术、指南针、火药武器",
+                description: "宋朝分为北宋和南宋两个时期。宋朝是中国历史上商品经济、文化教育、科技创新高度繁荣的时代。儒学复兴，理学产生，宋词成为文学代表。",
+                area: "北至淮河-大散关一线，南至海南岛"
+            }
+        };
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有朝代按钮
+            const dynastyBtns = document.querySelectorAll('.dynasty-btn');
+            const dynastyCards = document.querySelectorAll('.dynasty-card');
+            const detailSection = document.getElementById('dynasty-detail');
+            const dynastyAreas = document.querySelectorAll('.dynasty-area');
+            
+            // 添加按钮点击事件
+            dynastyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const dynasty = this.getAttribute('data-dynasty');
+                    showDynasty(dynasty);
+                });
+            });
+            
+            // 添加地图区域点击事件
+            dynastyAreas.forEach(area => {
+                area.addEventListener('click', function() {
+                    const dynasty = this.getAttribute('data-dynasty');
+                    showDynasty(dynasty);
+                    
+                    // 高亮对应时间轴按钮
+                    dynastyBtns.forEach(btn => {
+                        if(btn.getAttribute('data-dynasty') === dynasty) {
+                            btn.classList.add('bg-secondary');
+                            btn.classList.remove('bg-primary');
+                        } else {
+                            if(btn.classList.contains('bg-secondary')) {
+                                btn.classList.remove('bg-secondary');
+                                btn.classList.add('bg-primary');
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // 显示朝代信息函数
+            function showDynasty(dynasty) {
+                // 隐藏所有卡片
+                dynastyCards.forEach(card => {
+                    card.classList.add('hidden');
+                    card.classList.remove('active');
+                });
+                
+                // 显示默认卡片
+                document.getElementById('default-card').classList.add('hidden');
+                
+                // 显示所选朝代卡片
+                const selectedCard = document.getElementById(`${dynasty}-card`);
+                if(selectedCard) {
+                    selectedCard.classList.remove('hidden');
+                    selectedCard.classList.add('active');
+                    
+                    // 填充卡片内容
+                    const data = dynastyData[dynasty];
+                    selectedCard.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h2 class="text-2xl font-bold mb-2">${data.name} <span class="text-lg font-normal">(${data.years})</span></h2>
+                                <p class="text-white text-opacity-90 mb-4">${data.description.substring(0, 100)}...</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                                <i class="fas ${dynasty === 'tang' ? 'fa-crown' : 'fa-landmark'} text-3xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <div class="bg-white bg-opacity-30 p-2 rounded-lg mr-3">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <p><span class="font-semibold">主要疆域：</span>${data.area}</p>
+                        </div>
+                    `;
+                    
+                    // 更新详细信息区域
+                    detailSection.innerHTML = `
+                        <h3 class="text-xl font-bold text-primary mb-4">${data.name}详细信息</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-crown mr-2 text-secondary"></i>统治者</h4>
+                                <p class="mb-4">开国君主：${data.founder}</p>
+                                
+                                <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-landmark mr-2 text-secondary"></i>首都</h4>
+                                <p>${data.capital}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-hourglass-half mr-2 text-secondary"></i>持续时间</h4>
+                                <p class="mb-4">${data.years}</p>
+                                
+                                <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-book mr-2 text-secondary"></i>重要成就</h4>
+                                <p>${data.achievements}</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-white bg-opacity-20 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-scroll mr-2 text-secondary"></i>历史概述</h4>
+                            <p>${data.description}</p>
+                        </div>
+                    `;
+                    
+                    // 添加淡入动画
+                    detailSection.classList.remove('fade-in');
+                    setTimeout(() => {
+                        detailSection.classList.add('fade-in');
+                    }, 10);
+                }
+            }
+            
+            // 示例：默认显示秦朝信息
+            // showDynasty('qin');
+        });
+    </script>
+</body>
+</html>
